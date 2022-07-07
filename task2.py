@@ -5,11 +5,10 @@ import lxml.html
 animals_file = open("Категории животных.txt", "w+")
 url = 'http://ru.wikipedia.org/wiki/Категория:Животные_по_алфавиту'
 resp = requests.get(url)
-list_animals = []
 dict_animals_amount = {}
 
 
-def add_data(list_animals, resp):
+def add_data(resp):
     doc = lxml.html.document_fromstring(resp.text)
     links = doc.xpath('//*[@id="mw-pages"]/div/div/div/ul/li[a]/a')
     with open("Категории животных.txt", "a", encoding="utf-8") as f:
@@ -28,11 +27,11 @@ def some_funk(resp):
         if a.text == 'Следующая страница':
             url = 'https://ru.wikipedia.org/' + name
             resp = requests.get(url)
-            add_data(list_animals, resp)
+            add_data(resp)
             some_funk(resp)
 
 
-add_data(list_animals, resp)
+add_data(resp)
 some_funk(resp)
 
 with open("Категории животных.txt", encoding="utf8") as file:
